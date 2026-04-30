@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import { connectDB } from './libs/init.mongodb.js'
 import authRoute from './routes/auth.route.js'
 dotenv.config()
+import cookieParser from 'cookie-parser'
+
 
 const app = express();
 
@@ -10,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 //middlewares
 app.use(express.json());    //giúp express hiểu và đọc được request body dưới dạng json
+app.use(cookieParser());
 
 //public routes
 app.use('/api/auth', authRoute)
