@@ -1,9 +1,13 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { connectDB } from './libs/init.mongodb.js'
-import authRoute from './routes/auth.route.js'
-dotenv.config()
 import cookieParser from 'cookie-parser'
+
+import { connectDB } from './libs/init.mongodb.js'
+
+import authRoute from './routes/auth.route.js'
+import userRoute from './routes/user.route.js'
+import { AuthMiddleware } from './middlewares/auth.middleware.js'
+dotenv.config()
 
 
 const app = express();
@@ -18,6 +22,8 @@ app.use(cookieParser());
 app.use('/api/auth', authRoute)
 
 //private routes
+app.use(AuthMiddleware)
+app.use('/api/users', userRoute)
 
 connectDB()
     .then(() => {
