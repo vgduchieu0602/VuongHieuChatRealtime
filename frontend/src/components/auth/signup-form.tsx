@@ -1,12 +1,33 @@
 import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { z } from "zod"
+import {useForm} from 'react-hook-form'
+import {zodResolver} from '@hookform/resolvers/zod'
+
+const signUpSchema = z.object({
+  firstName: z.string().min(1, "Tên là bắt buộc"),
+  lastName: z.string().min(1, "Họ là bắt buộc"),
+  userName: z.string().min(3, "Tên đăng nhập phải có ít nhất 3 ký tự"),
+  email: z.email("Email không hợp lệ"),
+  password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+});
+
+type SignUpFormValues = z.infer<typeof signUpSchema>
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpSchema),
+  })
+
+  const onSubmit = async (data:SignUpFormValues) => {
+
+  }
+  
   return (
     <div
       className={cn(
@@ -19,7 +40,7 @@ export function SignupForm({
         <CardContent className="grid p-0 md:grid-cols-2 min-h-[640px]">
 
           {/* Left: Form */}
-          <form className="flex h-full flex-col justify-center bg-white px-8 py-6">
+          <form className="flex h-full flex-col justify-center bg-white px-8 py-6" onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full space-y-4">
 
               {/* Logo */}
@@ -28,16 +49,16 @@ export function SignupForm({
                   <img
                     src="/logo.png"
                     alt="Logo"
-                    className="w-32 h-32 object-contain"
+                    className="w-24 h-24 object-contain"
                   />
                 </a>
               </div>
 
               {/* Title */}
-              <div className="space-y-1 text-center">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold tracking-tight text-gray-900">
                   Tạo tài khoản
-                </h1>
+                </h2>
                 <p className="text-sm text-gray-500">
                   Chào mừng bạn! Hãy đăng ký để bắt đầu.
                 </p>
@@ -45,7 +66,7 @@ export function SignupForm({
 
               {/* Họ và Tên */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1 text-left">
+                <div className="text-left">
                   <label
                     htmlFor="lastName"
                     className="block text-sm font-medium text-gray-700"
@@ -55,12 +76,17 @@ export function SignupForm({
                   <Input
                     id="lastName"
                     type="text"
-                    placeholder="Nguyễn"
+                    placeholder="Vương Đức"
                     className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
+                    {...register('lastName')}
                   />
+
+                  {errors.lastName && (
+                    <p className="min-h-[16px] text-red-500 text-sm">{errors.lastName.message}</p>
+                  )}
                 </div>
 
-                <div className="space-y-1 text-left">
+                <div className="text-left">
                   <label
                     htmlFor="firstName"
                     className="block text-sm font-medium text-gray-700"
@@ -70,9 +96,14 @@ export function SignupForm({
                   <Input
                     id="firstName"
                     type="text"
-                    placeholder="Văn A"
+                    placeholder="Hiếu"
                     className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
+                    {...register('firstName')}
                   />
+
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm">{errors.firstName.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -89,7 +120,12 @@ export function SignupForm({
                   type="text"
                   placeholder="username123"
                   className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
+                  {...register('userName')}
                 />
+
+                {errors.userName && (
+                    <p className="text-red-500 text-sm">{errors.userName.message}</p>
+                  )}
               </div>
 
               {/* Email */}
@@ -105,7 +141,11 @@ export function SignupForm({
                   type="email"
                   placeholder="example@email.com"
                   className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
+                  {...register('email')}
                 />
+                {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email.message}</p>
+                  )}
               </div>
 
               {/* Password */}
@@ -121,13 +161,19 @@ export function SignupForm({
                   type="password"
                   placeholder="Tối thiểu 8 ký tự"
                   className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
+                  {...register('password')}
                 />
+
+                {errors.password && (
+                    <p className="text-red-500 text-sm">{errors.password.message}</p>
+                  )}
               </div>
 
               {/* Submit */}
               <Button
                 type="submit"
                 className="h-10 w-full rounded-md bg-gray-900 text-sm font-semibold text-white hover:bg-gray-700"
+                disabled={isSubmitting}
               >
                 Tạo tài khoản
               </Button>
