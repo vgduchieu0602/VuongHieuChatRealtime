@@ -11,9 +11,9 @@ const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000
 
 export const signUp = async (req, res) => {
     try {
-        const { username, password, email, firstName, lastName } = req.body
+        const { userName, password, email, firstName, lastName } = req.body
 
-        if (!username || !password || !email || !firstName || !lastName) {
+        if (!userName || !password || !email || !firstName || !lastName) {
             return res.status(400).json({
                 message: 'All fields are required',
                 success: false
@@ -32,7 +32,7 @@ export const signUp = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await User.create({
-            username,
+            userName,
             password: hashedPassword,
             email,
             displayName: `${firstName} ${lastName}`,
@@ -54,16 +54,16 @@ export const signUp = async (req, res) => {
 
 export const signIn = async (req, res) => {
     try {
-        const {username, password} = req.body
+        const {userName, password} = req.body
 
-        if(!username || !password) {
+        if(!userName || !password) {
             return res.status(400).json({
                 message: 'All fields are required',
                 success: false
             })
         }
 
-        const user = await User.findOne({username})
+        const user = await User.findOne({userName})
 
         if(!user) {
             return res.status(401).json({
@@ -101,7 +101,7 @@ export const signIn = async (req, res) => {
         })
 
         return res.status(200).json({
-            message: `User ${user.username} loggin successfully`,
+            message: `User ${user.userName} loggin successfully`,
             accessToken
         })
         

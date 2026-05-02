@@ -4,7 +4,7 @@ const DB_NAME = 'User'
 const COLLECTION_NAME = 'Users'
 
 const userSchema = new mongoose.Schema({
-    username: {
+    userName: {
         type: String,
         required: true,
         unique: true,
