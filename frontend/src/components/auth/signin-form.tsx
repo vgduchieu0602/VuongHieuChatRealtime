@@ -7,25 +7,22 @@ import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import { Label } from "../ui/label"
 
-const signUpSchema = z.object({
-  firstName: z.string().min(1, "Tên là bắt buộc"),
-  lastName: z.string().min(1, "Họ là bắt buộc"),
+const signInSchema = z.object({
   userName: z.string().min(3, "Tên đăng nhập phải có ít nhất 3 ký tự"),
-  email: z.email("Email không hợp lệ"),
   password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
 });
 
-type SignUpFormValues = z.infer<typeof signUpSchema>
+type SignInFormValues = z.infer<typeof signInSchema>
 
-export function SignupForm({
+export function SignInForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignUpFormValues>({
-    resolver: zodResolver(signUpSchema),
+  const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignInFormValues>({
+    resolver: zodResolver(signInSchema),
   })
 
-  const onSubmit = async (data:SignUpFormValues) => {
+  const onSubmit = async (data:SignInFormValues) => {
 
   }
   
@@ -58,55 +55,14 @@ export function SignupForm({
               {/* Title */}
               <div className="text-center">
                 <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-                  Tạo tài khoản
+                  Đăng nhập
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Chào mừng bạn! Hãy đăng ký để bắt đầu.
+                  Chào mừng bạn! Hãy đăng nhập để bắt đầu.
                 </p>
               </div>
 
-              {/* Họ và Tên */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="text-left">
-                  <Label
-                    htmlFor="lastName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Họ
-                  </Label>
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder="Vương Đức"
-                    className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
-                    {...register('lastName')}
-                  />
 
-                  {errors.lastName && (
-                    <p className="min-h-[16px] text-red-500 text-sm">{errors.lastName.message}</p>
-                  )}
-                </div>
-
-                <div className="text-left">
-                  <Label
-                    htmlFor="firstName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Tên
-                  </Label>
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder="Hiếu"
-                    className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
-                    {...register('firstName')}
-                  />
-
-                  {errors.firstName && (
-                    <p className="text-red-500 text-sm">{errors.firstName.message}</p>
-                  )}
-                </div>
-              </div>
 
               {/* Username */}
               <div className="space-y-1 text-left">
@@ -129,25 +85,7 @@ export function SignupForm({
                   )}
               </div>
 
-              {/* Email */}
-              <div className="space-y-1 text-left">
-                <Label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="example@email.com"
-                  className="h-10 rounded-md border-gray-200 bg-gray-50 text-sm focus:bg-white"
-                  {...register('email')}
-                />
-                {errors.email && (
-                    <p className="text-red-500 text-sm">{errors.email.message}</p>
-                  )}
-              </div>
+
 
               {/* Password */}
               <div className="space-y-1 text-left">
@@ -176,17 +114,17 @@ export function SignupForm({
                 className="h-10 w-full rounded-md bg-gray-900 text-sm font-semibold text-white hover:bg-gray-700"
                 disabled={isSubmitting}
               >
-                Tạo tài khoản
+                Đăng nhập
               </Button>
 
               {/* Sign in */}
               <p className="text-center text-sm text-gray-500">
-                Đã có tài khoản?{" "}
+                Chưa có tài khoản?{" "}
                 <a
-                  href="/signin"
+                  href="/signup"
                   className="font-medium text-gray-900 underline underline-offset-2 hover:text-gray-600"
                 >
-                  Đăng nhập
+                  Đăng ký
                 </a>
               </p>
             </div>
