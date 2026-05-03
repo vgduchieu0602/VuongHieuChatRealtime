@@ -6,7 +6,7 @@ import User from '../models/User.js'
 import Session from '../models/Session.js'
 
 
-const ACCESS_TOKEN_TTL = '30m'
+const ACCESS_TOKEN_TTL = "30s"
 const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000
 
 export const signUp = async (req, res) => {
@@ -128,5 +128,46 @@ export const signOut = async (req, res) => {
         return res.status(204).json({message: 'Sign out successfully'})
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const refreshToken = async (req, res) => {
+    try {
+        //Lấy refresh token từ cookie
+        const token = req.cookies?.refreshToken
+
+        if(!token) {
+            return res.status(401).json({
+                message: "Token không tồn tại"
+            })
+        }
+
+        //So sánh với refresh token trong db
+        const session = await Session.findOne({refreshToken: token})
+
+        if (!session) {
+            return res.status(403).json({
+                message: "Token không hợp lệ hoặc đã hết hạn"
+            })
+        }
+
+        //Kiểm tra hết hạn chưa
+        if(session.expiresAt < new Date()) {
+            return res.status(403).json({
+                message: "Token đã hết hạn"
+            })
+        }
+
+        //Tạo accessToken mới
+        const accessToken = jwt.sign({userId: session.userId}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: ACCESS_TOKEN_TTL})
+
+        //Trả về accessToken
+        return res.status(200).json({message: "Tạo mới accessToken thành công", accessToken})
+    } catch (error) {
+        console.error("Lỗi khi gọi refreshToken: ", error)
+        return res.status(500).json({
+            message: 'Internal server error',
+            success: false
+        })
     }
 }
