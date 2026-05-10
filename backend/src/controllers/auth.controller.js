@@ -6,8 +6,8 @@ import User from '../models/User.js'
 import Session from '../models/Session.js'
 
 
-const ACCESS_TOKEN_TTL = "30s"
-const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000
+const ACCESS_TOKEN_TTL = 30 * 60 * 1000
+const REFRESH_TOKEN_TTL = 14 * 24 * 60 * 60 * 1000
 
 export const signUp = async (req, res) => {
     try {
@@ -40,8 +40,7 @@ export const signUp = async (req, res) => {
 
         return res.status(201).json({
             message: 'User created successfully',
-            success: true,
-            data: newUser
+            success: true
         })
     } catch (error) {
         console.log("Error in sign-up controller: ", error);

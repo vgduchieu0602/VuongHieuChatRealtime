@@ -26,6 +26,11 @@ export function SignupForm({
   const {signUp} = useAuthStore()
   const navigate = useNavigate()
 
+  //register là hàm lấy ra giá trị các ô input
+  //handleSubmit là hàm sẽ chạy khi người dùng ấn đăng ký
+  //formState là object chứa các thông tin về trạng thái của form
+  //errors: chứa lỗi nếu input không hợp lệ
+  //isSubmitting: để biết khi nào form đang trong quá trình gửi dữ liệu
   const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
   })
@@ -214,7 +219,7 @@ export function SignupForm({
       </Card>
 
       {/* Footer */}
-      <div className="text-xs text-balance mt-4 px-4 text-center text-gray-500 *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4 *:[a]:">
+      <div className="text-xs text-balance mt-4 px-4 text-center text-gray-500 *:[a]:hover:text-primary *:[a]:underline *:[a]:underline-offset-4">
         Bằng cách tiếp tục, bạn đồng ý với{" "}
         <a
           href="#"

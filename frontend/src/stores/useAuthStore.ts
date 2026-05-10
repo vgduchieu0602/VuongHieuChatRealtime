@@ -3,6 +3,7 @@ import {toast} from 'sonner'
 import { authService } from '@/services/auth.service'
 import type { AuthState } from '@/types/store'
 
+//Tạo ra 1 object chứa state, function
 export const useAuthStore = create<AuthState>((set, get) => ({
     accessToken: null,
     user: null,
@@ -52,12 +53,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     signOut: async () => {
         try {
-            get().clearState()
             await authService.signOut()
+            get().clearState()
             toast.success("Đăng xuất thành công")
         } catch (error) {
             console.error(error);
-            toast.error("Lỗi xảy ra khi logout. Hãy thử lại")
+            toast.error("Lỗi xảy ra khi đăng xuất. Hãy thử lại")
         }
     },
 

@@ -7,6 +7,8 @@ import { connectDB } from './libs/init.mongodb.js'
 
 import authRoute from './routes/auth.route.js'
 import userRoute from './routes/user.route.js'
+import friendRoute from './routes/friend.route.js'
+
 import { AuthMiddleware } from './middlewares/auth.middleware.js'
 dotenv.config()
 
@@ -26,6 +28,7 @@ app.use('/api/auth', authRoute)
 //private routes
 app.use(AuthMiddleware)
 app.use('/api/users', userRoute)
+app.use('/api/friends', friendRoute)
 
 connectDB()
     .then(() => {
